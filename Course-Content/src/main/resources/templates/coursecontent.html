@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Course Content Management</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		.form-container {
+			width: 50%;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		.course-content-list {
+			width: 80%;
+			margin: 0 auto;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1 style="color: rebeccapurple;">Course Content Management</h1>
+
+		<!-- Create Course Content Form -->
+		<div class="form-container">
+			<h2 style="color: deeppink;">Create Course Content</h2>
+			<form th:action="@{/coursecontent/create}" th:object="${courseContent}" method="post"
+				enctype="multipart/form-data">
+				<div class="form-group">
+					<label for="courseName">Course Name:</label>
+					<input type="text" class="form-control" id="courseName" th:field="*{courseName}"
+						required="required">
+				</div>
+				<div class="form-group">
+					<label for="description">Description:</label>
+					<input type="text" class="form-control" id="description" th:field="*{description}"
+						required="required">
+				</div>
+				<div class="form-group">
+					<label for="pdfFile">PDF File:</label>
+					<input type="file" class="form-control" id="pdfFile" name="file" accept=".pdf">
+				</div>
+				<button type="submit" class="btn btn-success">Create Course Content</button>
+			</form>
+		</div>
+
+		<!-- Course Content List -->
+		<div class="course-content-list">
+			<h2 style="color: purple;">Course Content List</h2>
+			<table class="table">
+				<thead>
+					<tr class="bg-light">
+						<th>course_id</th>
+						<th>course_name</th>
+						<th>description</th>
+						<th>file_name</th>
+						<th>pdf_data</th>
+					</tr>
+					<thead>
+						<tr class="bg-light">
+							<th>Course Name</th>
+							<th>Description</th>
+							<th>PDF Data</th>
+							<th>Edit</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+				<tbody>
+					<tr th:each="courseContent : ${courseContentList}">
+						<td th:text="${courseContent.courseName}"></td>
+						<td th:text="${courseContent.description}"></td>
+						<td>
+							<a th:href="@{/coursecontent/downloadPDF/{courseId}(courseId=${courseContent.courseId})}">
+								Download PDF
+							</a>
+						</td>
+						<td><a
+								th:href="@{/coursecontent/editCourseContent/{courseId}(courseId=${courseContent.courseId})}">Edit</a>
+						</td>
+						<td><a
+								th:href="@{/coursecontent/deleteCourseContent/{courseId}(courseId=${courseContent.courseId})}">Delete</a>
+						</td>
+					</tr>
+				</tbody>
+
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>
